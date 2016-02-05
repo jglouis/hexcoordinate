@@ -33,6 +33,31 @@ func Add(vs ...Vector) (ret Vector) {
 	return
 }
 
+// RotateBy60 takes a Vector and returns another Vector, rotated by n*60 degrees.
+func (v Vector) RotateBy60(n int) Vector {
+
+	// Transform to cubic coordinates
+	x, z := v.U, v.V
+	y := -x - z
+
+	nShift := n % 3
+	if n < 0 {
+		nShift = abs(n-1) % 3
+	}
+	switch nShift {
+	case 1:
+		x, y, z = z, x, y
+	case 2:
+		x, y, z = y, z, x
+	}
+
+	if abs(n%2) == 1 {
+		x, y, z = -x, -y, -z
+	}
+
+	return Vector{x, z}
+}
+
 // Angle returns the angle between two Vectors
 func Angle(vector1, vector2 Vector) float64 {
 	u1 := float64(vector1.U)

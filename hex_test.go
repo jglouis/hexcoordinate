@@ -31,6 +31,23 @@ func TestVectorAddition(t *testing.T) {
 	}
 }
 
+func TestVectorRotateBy60(t *testing.T) {
+	tests := map[Vector]Vector{
+		N.Vector().RotateBy60(0):   N.Vector(),
+		N.Vector().RotateBy60(1):   NE.Vector(),
+		N.Vector().RotateBy60(-1):  NW.Vector(),
+		N.Vector().RotateBy60(7):   NE.Vector(),
+		N.Vector().RotateBy60(-7):  NW.Vector(),
+		N.Vector().RotateBy60(-13): NW.Vector(),
+	}
+
+	for got, want := range tests {
+		if got != want {
+			t.Errorf("got %s but want %s", got, want)
+		}
+	}
+}
+
 func TestVectorAngle(t *testing.T) {
 	v0 := Vector{0, 0}
 
