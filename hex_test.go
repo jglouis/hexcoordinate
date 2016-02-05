@@ -12,3 +12,13 @@ func TestAddition(t *testing.T) {
 		t.Errorf("Add %s and %s, got %s expected %s", v1, v2, got, expected)
 	}
 }
+
+func TestRotation(t *testing.T) {
+	o := N
+	got := o.Rotate(7)
+	expected := NE
+
+	if got != expected {
+		t.Errorf("got %s expected %s", got, expected)
+	}
+}
