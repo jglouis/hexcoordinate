@@ -2,21 +2,76 @@ package hex
 
 import "testing"
 
-func TestAddition(t *testing.T) {
+func TestVectorAddition(t *testing.T) {
 	v1 := Vector{0, 1}
 	v2 := Vector{2, 3}
-	want := Vector{2, 4}
-	got := Add(v1, v2)
+	v3 := Vector{3, 4}
 
-	if got != want {
-		t.Errorf("Add %s and %s, got %s expected %s", v1, v2, got, want)
+	tests := map[Vector]Vector{
+		Add(v1, v2):     Vector{2, 4},
+		Add(v1, v2, v3): Vector{5, 8},
+	}
+
+	for got, want := range tests {
+		if got != want {
+			t.Errorf("got %s but want %s", got, want)
+		}
 	}
 }
 
-func TestRotation(t *testing.T) {
+func TestVectorString(t *testing.T) {
+	tests := map[string]string{
+		Vector{0, 0}.String():  "Vector(0,0)",
+		Vector{-1, 0}.String(): "Vector(-1,0)",
+		Vector{4, 5}.String():  "Vector(4,5)",
+	}
+
+	for got, want := range tests {
+		if got != want {
+			t.Errorf("got %s but want %s", got, want)
+		}
+	}
+}
+
+func TestOrientationRotate(t *testing.T) {
 	tests := map[Orientation]Orientation{
 		N.Rotate(7):  NE,
 		S.Rotate(-1): SE,
+	}
+
+	for got, want := range tests {
+		if got != want {
+			t.Errorf("got %s but want %s", got, want)
+		}
+	}
+}
+
+func TestOrientationVector(t *testing.T) {
+	tests := map[Vector]Vector{
+		N.Vector():  Vector{0, 1},
+		NE.Vector(): Vector{-1, 1},
+		SE.Vector(): Vector{-1, 0},
+		S.Vector():  Vector{0, -1},
+		SW.Vector(): Vector{1, -1},
+		NW.Vector(): Vector{1, 0},
+	}
+
+	for got, want := range tests {
+		if got != want {
+			t.Errorf("got %s but want %s", got, want)
+		}
+	}
+}
+
+func TestOrientationString(t *testing.T) {
+	tests := map[string]string{
+		N.String():               "N",
+		NE.String():              "NE",
+		SE.String():              "SE",
+		S.String():               "S",
+		SW.String():              "SW",
+		NW.String():              "NW",
+		Orientation(-1).String(): "Orientation(-1)",
 	}
 
 	for got, want := range tests {
