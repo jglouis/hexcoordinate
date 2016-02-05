@@ -78,15 +78,31 @@ func TestVectorAngle(t *testing.T) {
 }
 
 func TestVectorString(t *testing.T) {
-	tests := map[string]string{
-		Vector{0, 0}.String():  "Vector(0,0)",
-		Vector{-1, 0}.String(): "Vector(-1,0)",
-		Vector{4, 5}.String():  "Vector(4,5)",
+	tests := map[Vector]string{
+		Vector{0, 0}:  "Vector(0,0)",
+		Vector{-1, 0}: "Vector(-1,0)",
+		Vector{4, 5}:  "Vector(4,5)",
 	}
 
-	for got, want := range tests {
-		if got != want {
-			t.Errorf("got %s but want %s", got, want)
+	for input, expected := range tests {
+		got := input.String()
+		if got != expected {
+			t.Errorf("%s.String() returned %s but expected %s", input, got, expected)
+		}
+	}
+}
+
+func TestCoordinateString(t *testing.T) {
+	tests := map[Coordinate]string{
+		Coordinate{0, 0}:  "Coordinate(0,0)",
+		Coordinate{-1, 0}: "Coordinate(-1,0)",
+		Coordinate{4, 5}:  "Coordinate(4,5)",
+	}
+
+	for input, expected := range tests {
+		got := input.String()
+		if got != expected {
+			t.Errorf("%s.String() returned %s but expected %s", input, got, expected)
 		}
 	}
 }
