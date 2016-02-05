@@ -1,3 +1,4 @@
+// Package hex provides tools for handling axial hexagonal coordinates.
 package hex
 
 import (
@@ -12,14 +13,14 @@ func abs(n int) int {
 	return n
 }
 
-// Coordinate is hexagonal Coordinate with (U,V) axial coordinates
+// Coordinate represents hexagonal Coordinates with (U,V) axial coordinates
 type Coordinate Vector
 
 func (c Coordinate) String() string {
 	return fmt.Sprintf("Coordinate(%d,%d)", c.U, c.V)
 }
 
-// Vector is hexagonal vector with (U,V) axial coordinates
+// Vector represents a hexagonal vector with (U,V) axial coordinates
 type Vector struct {
 	U, V int
 }
@@ -28,7 +29,7 @@ func (v Vector) String() string {
 	return fmt.Sprintf("Vector(%d,%d)", v.U, v.V)
 }
 
-// Add computes the sum vector
+// Add returns a Vector that is the sum of all the given Vectors
 func Add(vs ...Vector) (ret Vector) {
 	for _, v := range vs {
 		ret.U += v.U
@@ -39,11 +40,11 @@ func Add(vs ...Vector) (ret Vector) {
 
 // RotateBy60 takes a Vector and returns another Vector, rotated by n*60 degrees.
 func (v Vector) RotateBy60(n int) Vector {
-
 	// Transform to cubic coordinates
 	x, z := v.U, v.V
 	y := -x - z
 
+	// Shifting coordinates
 	nShift := n % 3
 	if n < 0 {
 		nShift = abs(n-1) % 3
@@ -55,6 +56,7 @@ func (v Vector) RotateBy60(n int) Vector {
 		x, y, z = y, z, x
 	}
 
+	// Flip signs every 60 degrees
 	if abs(n%2) == 1 {
 		x, y, z = -x, -y, -z
 	}
@@ -80,7 +82,7 @@ func Angle(vector1, vector2 Vector) float64 {
 	return math.Atan2(Det, Dot)
 }
 
-// Distance return the distance as a number of hexagon tiles separating two coordinates
+// Distance returns the distance as a number of hexagon tiles separating two coordinates
 func Distance(a, b Coordinate) int {
 	return (abs(a.U-b.U) + abs(a.U+a.V-b.U-b.V) + abs(a.V-b.V)) / 2
 }
@@ -113,7 +115,7 @@ func (o Orientation) Vector() Vector {
 	return vectorByOrientation[o]
 }
 
-// Rotate returns a rotated orientation
+// RotateBy60 returns a rotated Orientation
 func (o Orientation) RotateBy60(n int) Orientation {
 	return (o + Orientation(n)) % 6
 }
