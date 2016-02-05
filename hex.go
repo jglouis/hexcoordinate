@@ -1,6 +1,9 @@
 package hex
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func abs(n int) int {
 	if n < 0 {
@@ -28,6 +31,21 @@ func Add(vs ...Vector) (ret Vector) {
 		ret.V += v.V
 	}
 	return
+}
+
+// Angle returns the angle between two Vectors
+func Angle(v1, v2 Vector) float64 {
+	X1 := math.Sqrt(3) * float64(v1.U+v1.V) / 2.0
+	Y1 := 1.5 * float64(v1.V)
+	X2 := math.Sqrt(3) * float64(v2.U+v2.V) / 2.0
+	Y2 := 1.5 * float64(v2.V)
+
+	// atan2(vector2.y, vector2.x) - atan2(vector1.y, vector1.x);
+
+	Dot := X1*X2 + Y1*Y2
+	Det := X1*Y2 - Y1*X2
+
+	return math.Atan2(Det, Dot)
 }
 
 // Distance return the distance as a number of hexagon tiles separating two coordinates
