@@ -2,6 +2,16 @@ package hex
 
 import "fmt"
 
+func abs(n int) int {
+	if n < 0 {
+		return -n
+	}
+	return n
+}
+
+// Coordinate is hexagonal Coordinate with (U,V) axial coordinates
+type Coordinate Vector
+
 // Vector is hexagonal vector with (U,V) axial coordinates
 type Vector struct {
 	U, V int
@@ -18,6 +28,11 @@ func Add(vs ...Vector) (ret Vector) {
 		ret.V += v.V
 	}
 	return
+}
+
+// Distance return the distance as a number of hexagon tiles separating two coordinates
+func Distance(a, b Coordinate) int {
+	return (abs(a.U-b.U) + abs(a.U+a.V-b.U-b.V) + abs(a.V-b.V)) / 2
 }
 
 // Orientation represents the orientation of something in a hexagonal vector space

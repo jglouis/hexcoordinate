@@ -33,6 +33,20 @@ func TestVectorString(t *testing.T) {
 	}
 }
 
+func TestCoordinateDistance(t *testing.T) {
+	tests := map[int]int{
+		Distance(Coordinate{0, 0}, Coordinate{0, 1}):  1,
+		Distance(Coordinate{0, 0}, Coordinate{0, 0}):  0,
+		Distance(Coordinate{3, 0}, Coordinate{-3, 2}): 6,
+	}
+
+	for got, want := range tests {
+		if got != want {
+			t.Errorf("got %d but want %d", got, want)
+		}
+	}
+}
+
 func TestOrientationRotate(t *testing.T) {
 	tests := map[Orientation]Orientation{
 		N.Rotate(7):  NE,
