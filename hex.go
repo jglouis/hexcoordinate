@@ -15,6 +15,10 @@ func abs(n int) int {
 // Coordinate is hexagonal Coordinate with (U,V) axial coordinates
 type Coordinate Vector
 
+func (c Coordinate) String() string {
+	return fmt.Sprintf("Coordinate(%d,%d)", c.U, c.V)
+}
+
 // Vector is hexagonal vector with (U,V) axial coordinates
 type Vector struct {
 	U, V int
@@ -110,6 +114,6 @@ func (o Orientation) Vector() Vector {
 }
 
 // Rotate returns a rotated orientation
-func (o Orientation) Rotate(by60degrees int) Orientation {
-	return (o + Orientation(by60degrees)) % 6
+func (o Orientation) RotateBy60(n int) Orientation {
+	return (o + Orientation(n)) % 6
 }
