@@ -33,14 +33,12 @@ func TestVectorAddition(t *testing.T) {
 
 func TestVectorAngle(t *testing.T) {
 	v0 := Vector{0, 0}
-	v1 := Vector{0, -1}
-	v2 := Vector{0, 1}
-	v3 := Vector{-1, 1}
 
 	tests := map[float64]float64{
-		Angle(v0, v0): 0,
-		Angle(v1, v2): math.Pi,
-		Angle(v2, v3): math.Pi / 6, // should not pass!
+		Angle(v0, v0):                  0,
+		Angle(N.Vector(), NE.Vector()): math.Pi / 3,
+		Angle(N.Vector(), NW.Vector()): -math.Pi / 3,
+		Angle(N.Vector(), S.Vector()):  math.Pi,
 	}
 
 	for got, want := range tests {
@@ -93,12 +91,12 @@ func TestOrientationRotate(t *testing.T) {
 
 func TestOrientationVector(t *testing.T) {
 	tests := map[Vector]Vector{
-		N.Vector():  Vector{0, 1},
-		NE.Vector(): Vector{-1, 1},
-		SE.Vector(): Vector{-1, 0},
-		S.Vector():  Vector{0, -1},
-		SW.Vector(): Vector{1, -1},
-		NW.Vector(): Vector{1, 0},
+		N.Vector():  Vector{0, -1},
+		NE.Vector(): Vector{1, -1},
+		SE.Vector(): Vector{1, 0},
+		S.Vector():  Vector{0, 1},
+		SW.Vector(): Vector{-1, 1},
+		NW.Vector(): Vector{-1, 0},
 	}
 
 	for got, want := range tests {

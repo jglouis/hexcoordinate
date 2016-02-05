@@ -34,16 +34,19 @@ func Add(vs ...Vector) (ret Vector) {
 }
 
 // Angle returns the angle between two Vectors
-func Angle(v1, v2 Vector) float64 {
-	X1 := math.Sqrt(3) * float64(v1.U+v1.V) / 2.0
-	Y1 := 1.5 * float64(v1.V)
-	X2 := math.Sqrt(3) * float64(v2.U+v2.V) / 2.0
-	Y2 := 1.5 * float64(v2.V)
-
+func Angle(vector1, vector2 Vector) float64 {
+	u1 := float64(vector1.U)
+	v1 := float64(vector1.V)
+	u2 := float64(vector2.U)
+	v2 := float64(vector2.V)
+	x1 := math.Sqrt(3) * (u1 + v1/2.0)
+	y1 := 1.5 * v1
+	x2 := math.Sqrt(3) * (u2 + v2/2.0)
+	y2 := 1.5 * v2
 	// atan2(vector2.y, vector2.x) - atan2(vector1.y, vector1.x);
 
-	Dot := X1*X2 + Y1*Y2
-	Det := X1*Y2 - Y1*X2
+	Dot := x1*x2 + y1*y2
+	Det := x1*y2 - y1*x2
 
 	return math.Atan2(Det, Dot)
 }
@@ -68,12 +71,12 @@ const (
 )
 
 var vectorByOrientation = map[Orientation]Vector{
-	N:  Vector{0, 1},
-	NE: Vector{-1, 1},
-	SE: Vector{-1, 0},
-	S:  Vector{0, -1},
-	SW: Vector{1, -1},
-	NW: Vector{1, 0},
+	N:  Vector{0, -1},
+	NE: Vector{1, -1},
+	SE: Vector{1, 0},
+	S:  Vector{0, 1},
+	SW: Vector{-1, 1},
+	NW: Vector{-1, 0},
 }
 
 // Vector gives the hex.Vector correponding to the Orientation
