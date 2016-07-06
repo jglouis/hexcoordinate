@@ -206,7 +206,7 @@ func TestHexToPixel(t *testing.T) {
 	}
 
 	for input, expected := range tests {
-		got := input.HexToPixel()
+		got := input.HexToPixel(PointyTop)
 		if got != expected {
 			t.Errorf("%s.HexToPixel() returned %s but expected %s", input, got, expected)
 		}
@@ -222,10 +222,12 @@ func TestConversion(t *testing.T) {
 	}
 
 	for _, coordinate := range coordinates {
-		got := coordinate.HexToPixel().PixelToHex()
-		expected := coordinate
-		if got != expected {
-			t.Errorf("%s.HexToPixel().PixelToHex() returned %s but expected %s", got, got, expected)
+		for _, gridOrientation := range []GridOrientation{PointyTop, FlatTop} {
+			got := coordinate.HexToPixel(gridOrientation).PixelToHex(gridOrientation)
+			expected := coordinate
+			if got != expected {
+				t.Errorf("%s.HexToPixel().PixelToHex() returned %s but expected %s", got, got, expected)
+			}
 		}
 	}
 

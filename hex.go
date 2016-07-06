@@ -120,17 +120,40 @@ func (o Orientation) RotateBy60(n int) Orientation {
 	return (o + Orientation(n)) % 6
 }
 
+// GridOrientation indicates how hewagons are oriented in the grid (flat or pointy top)
+type GridOrientation int
+
+// GridOrientation constants
+const (
+	PointyTop GridOrientation = iota
+	FlatTop
+)
+
 // HexToPixel converts hexagonal coordinates into pixel coordinates
-func (c Coordinate) HexToPixel() PixelCoordinate {
-	x := math.Sqrt(3) * (float64(c.U) + float64(c.V)/2)
-	y := 1.5 * float64(c.V)
+func (c Coordinate) HexToPixel(gridOrientation GridOrientation) PixelCoordinate {
+	var x, y float64
+	switch gridOrientation {
+	case PointyTop:
+		x = math.Sqrt(3) * (float64(c.U) + float64(c.V)/2)
+		y = 1.5 * float64(c.V)
+	case FlatTop:
+		x = 1.5 * float64(c.U)
+		y = math.Sqrt(3) * (float64(c.V) + float64(c.U)/2)
+	}
 	return PixelCoordinate{X: x, Y: y}
 }
 
 // PixelToHex converts pixel coordinates into hexagonal coordinates
-func (p PixelCoordinate) PixelToHex() Coordinate {
-	u := (p.X*math.Sqrt(3)/3 - p.Y/3)
-	v := p.Y * 2.0 / 3.0
+func (p PixelCoordinate) PixelToHex(gridOrientation GridOrientation) Coordinate {
+	var u, v float64
+	switch gridOrientation {
+	case PointyTop:
+		u = p.X*math.Sqrt(3)/3 - p.Y/3
+		v = p.Y * 2.0 / 3.0
+	case FlatTop:
+		u = p.X * 2.0 / 3.0
+		v = p.Y*math.Sqrt(3)/3 - p.X/3
+	}
 	return Coordinate{U: round(u), V: round(v)}
 }
 
