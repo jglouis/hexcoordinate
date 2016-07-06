@@ -17,7 +17,7 @@ func abs(n int) int {
 type Coordinate Vector
 
 func (c Coordinate) String() string {
-	return fmt.Sprintf("Coordinate(%d,%d)", c.U, c.V)
+	return fmt.Sprintf("Hexagonal Coordinate(%d,%d)", c.U, c.V)
 }
 
 // Vector represents a hexagonal vector with (U,V) axial coordinates
@@ -26,7 +26,7 @@ type Vector struct {
 }
 
 func (v Vector) String() string {
-	return fmt.Sprintf("Vector(%d,%d)", v.U, v.V)
+	return fmt.Sprintf("Hexagonal Vector(%d,%d)", v.U, v.V)
 }
 
 // Add returns a Vector that is the sum of all the given Vectors
@@ -118,4 +118,22 @@ func (o Orientation) Vector() Vector {
 // RotateBy60 returns a rotated Orientation
 func (o Orientation) RotateBy60(n int) Orientation {
 	return (o + Orientation(n)) % 6
+}
+
+// HexToPixel converts hexagonal coordinates into pixel coordinates
+func (c Coordinate) HexToPixel() PixelCoordinate {
+	x := math.Sqrt(3) * (float64(c.U) + float64(c.V)/2)
+	y := 1.5 * float64(c.V)
+	return PixelCoordinate{X: x, Y: y}
+}
+
+// PixelToHex converts pixel coordinates into hexagonal coordinates
+func (p PixelCoordinate) PixelToHex() Coordinate {
+	u := (p.X*math.Sqrt(3)/3 - p.Y/3)
+	v := p.Y * 2.0 / 3.0
+	return Coordinate{U: round(u), V: round(v)}
+}
+
+func round(f float64) int {
+	return int(math.Floor(f + .5))
 }

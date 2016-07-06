@@ -58,6 +58,9 @@ func TestVectorRotateBy60(t *testing.T) {
 
 func TestVectorAngle(t *testing.T) {
 	v0 := Vector{0, 0}
+	v1 := Vector{2, 0}
+	v2 := Vector{0, -1}
+	v3 := Vector{0, 3}
 
 	tests := []struct {
 		input1, input2 Vector
@@ -67,6 +70,8 @@ func TestVectorAngle(t *testing.T) {
 		{N.Vector(), NE.Vector(), math.Pi / 3},
 		{N.Vector(), NW.Vector(), -math.Pi / 3},
 		{N.Vector(), S.Vector(), math.Pi},
+		{v1, v2, -2 * math.Pi / 3},
+		{v1, v3, math.Pi / 3},
 	}
 
 	for _, test := range tests {
@@ -79,9 +84,9 @@ func TestVectorAngle(t *testing.T) {
 
 func TestVectorString(t *testing.T) {
 	tests := map[Vector]string{
-		Vector{0, 0}:  "Vector(0,0)",
-		Vector{-1, 0}: "Vector(-1,0)",
-		Vector{4, 5}:  "Vector(4,5)",
+		Vector{0, 0}:  "Hexagonal Vector(0,0)",
+		Vector{-1, 0}: "Hexagonal Vector(-1,0)",
+		Vector{4, 5}:  "Hexagonal Vector(4,5)",
 	}
 
 	for input, expected := range tests {
@@ -94,9 +99,24 @@ func TestVectorString(t *testing.T) {
 
 func TestCoordinateString(t *testing.T) {
 	tests := map[Coordinate]string{
-		Coordinate{0, 0}:  "Coordinate(0,0)",
-		Coordinate{-1, 0}: "Coordinate(-1,0)",
-		Coordinate{4, 5}:  "Coordinate(4,5)",
+		Coordinate{0, 0}:  "Hexagonal Coordinate(0,0)",
+		Coordinate{-1, 0}: "Hexagonal Coordinate(-1,0)",
+		Coordinate{4, 5}:  "Hexagonal Coordinate(4,5)",
+	}
+
+	for input, expected := range tests {
+		got := input.String()
+		if got != expected {
+			t.Errorf("%s.String() returned %s but expected %s", input, got, expected)
+		}
+	}
+}
+
+func TestPixelCoordinateString(t *testing.T) {
+	tests := map[PixelCoordinate]string{
+		PixelCoordinate{0, 0}:  "Pixel Coordinate(0.00,0.00)",
+		PixelCoordinate{-1, 0}: "Pixel Coordinate(-1.00,0.00)",
+		PixelCoordinate{4, 5}:  "Pixel Coordinate(4.00,5.00)",
 	}
 
 	for input, expected := range tests {
@@ -178,4 +198,35 @@ func TestOrientationString(t *testing.T) {
 			t.Errorf("%s.String() returned %s but expected %s", input, got, expected)
 		}
 	}
+}
+
+func TestHexToPixel(t *testing.T) {
+	tests := map[Coordinate]PixelCoordinate{
+		Coordinate{U: 0, V: 0}: PixelCoordinate{X: 0, Y: 0},
+	}
+
+	for input, expected := range tests {
+		got := input.HexToPixel()
+		if got != expected {
+			t.Errorf("%s.HexToPixel() returned %s but expected %s", input, got, expected)
+		}
+	}
+}
+
+func TestConversion(t *testing.T) {
+	coordinates := []Coordinate{}
+	for u := -10; u <= 10; u++ {
+		for v := -10; v <= 10; v++ {
+			coordinates = append(coordinates, Coordinate{U: u, V: v})
+		}
+	}
+
+	for _, coordinate := range coordinates {
+		got := coordinate.HexToPixel().PixelToHex()
+		expected := coordinate
+		if got != expected {
+			t.Errorf("%s.HexToPixel().PixelToHex() returned %s but expected %s", got, got, expected)
+		}
+	}
+
 }
